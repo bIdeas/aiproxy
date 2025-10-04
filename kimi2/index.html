@@ -1,0 +1,36 @@
+# kimi2/index.html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Peaceful LLM 2</title>
+  <style>
+    body { background: #1e1e2f; color: #f0f0ff; margin: 0; display: flex; flex-direction: column; height: 100vh; }
+    #entry { display: none; place-items: center; height: 100vh; }
+    #entry form { display: grid; gap: 0.6rem; max-width: 300px; }
+    input, button { padding: 0.6rem; border-radius: 6px; border: none; }
+    button { background: #00afff; color: #fff; cursor: pointer; }
+    #chat { display: none; flex: 1; flex-direction: column; }
+    #log { flex: 1; overflow-y: auto; padding: 0.6rem; font-family: monospace; }
+    .user { color: #4af; }
+    .assistant { color: #afa; }
+    .system { color: #faa; }
+  </style>
+</head>
+<body>
+  <div id="entry">
+    <form onsubmit="sendLink(); return false;">
+      <input id="email" type="email" placeholder="Your e-mail" required>
+      <button type="submit">Get Link</button>
+    </form>
+  </div>
+  <div id="chat">
+    <div id="log"></div>
+    <form onsubmit="ask(); return false;">
+      <input id="prompt" placeholder="Ask anything...">
+      <button type="submit">Send</button>
+    </form>
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

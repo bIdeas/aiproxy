@@ -3,7 +3,7 @@ import nacl from "tweetnacl";
 import boxen from "./boxen"; // tiny wrapper around nacl.secretbox
 
 const GH_TOKEN = import.meta.env.VITE_GH_TOKEN; // GitHub personal token (public repo)
-const REPO = "yourname/kimi2"; // repo under same user
+const REPO = "aiproxy/kimi2"; // repo under same user
 const PATH = "db.json"; // single encrypted blob in repo
 
 type Agent = "openai" | "huggingchat" | "wasm_llama";

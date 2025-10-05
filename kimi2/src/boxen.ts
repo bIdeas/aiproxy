@@ -9,7 +9,14 @@ export function encode(plain: string, email: string): string {
 }
 export function decode(enc: string, email: string): string {
   const key = nacl.hash(new TextEncoder().encode(email)).slice(0, 32);
-  const buf = Uint8Array.from(atob(enc), (c) => c.charCodeAt(0));
+
+  // Fix: Properly decode base64 binary data
+  const binaryString = atob(enc);
+  const buf = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    buf[i] = binaryString.charCodeAt(i);
+  }
+
   const nonce = buf.slice(0, nacl.secretbox.nonceLength);
   const box = buf.slice(nacl.secretbox.nonceLength);
   const plain = nacl.open(box, nonce, key);

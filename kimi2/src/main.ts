@@ -78,7 +78,13 @@ async start() {
     document.getElementById("entry")!.style.display = "block";
     return;
   }
-  email = JSON.parse(atob(token.split(".")[0])).email;
+  try {
+    email = JSON.parse(atob(token.split(".")[0])).email;
+  } catch (e) {
+    alert("Invalid token format");
+    location.href = "./";
+    return;
+  }
   await loadUser();
   if (!sessions[token] || sessions[token].exp < Date.now()) {
     alert("Expired or invalid link");

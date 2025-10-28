@@ -1,0 +1,27 @@
+{
+  "name": "peaceful-llm",
+  "version": "1.0.0",
+  "description": "Peaceful LLM - AI Proxy with Multi-Provider Integration",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 8080 -c-1",
+    "serve": "npx http-server -p 3000",
+    "dev": "npx http-server"
+  },
+  "keywords": [
+    "ai",
+    "llm",
+    "proxy",
+    "chatbot",
+    "openai",
+    "groq",
+    "together-ai",
+    "hugging-face",
+    "ollama"
+  ],
+  "author": "Peaceful LLM Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

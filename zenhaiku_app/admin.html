@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peaceful LLM - Admin Console</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .token-display { @apply bg-gradient-to-r from-amber-100 to-orange-100 border-2 border-amber-400 rounded-lg p-4 text-center; }
+        .pulse { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div class="min-h-screen p-4">
+        <div class="max-w-2xl mx-auto">
+            <div class="text-center mb-8 mt-8">
+                <h1 class="text-4xl font-bold text-white mb-2">🔐 Admin Console</h1>
+                <p class="text-gray-400">Peaceful LLM - Session Token Generator</p>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-2xl p-8 fade-in">
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Generate Access Token</h2>
+                    
+                    <form id="tokenForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Target Email</label>
+                            <input type="email" id="targetEmail" value="frantisek.vedma@icloud.com" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                                <input type="tel" id="phoneNumber" value="+420608158747" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Token Validity (minutes)</label>
+                                <input type="number" id="tokenValidity" value="110" min="15" max="1440" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-3 rounded-lg hover:shadow-lg transition">🔑 Generate & Send Token</button>
+                    </form>
+                </div>
+
+                <div id="tokenDisplay" class="mb-8 hidden">
+                    <div class="token-display mb-4">
+                        <p class="text-xs text-gray-600 mb-2">Your Access Token</p>
+                        <p id="generatedToken" class="text-3xl font-mono font-bold text-amber-900 tracking-wider mb-2">• • • • • •</p>
+                        <p id="tokenExpiry" class="text-xs text-gray-700">Valid for 110 minutes</p>
+                        <button type="button" id="copyTokenBtn" class="mt-3 px-4 py-1 bg-amber-500 text-white rounded hover:bg-amber-600 transition text-sm">Copy Token</button>
+                    </div>
+
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                        <p class="text-sm text-blue-800"><strong>✓ Token sent to:</strong><br>📧 Email: <span id="sentEmail"></span><br>📱 SMS: <span id="sentPhone"></span></p>
+                    </div>
+
+                    <div id="deliveryStatus" class="space-y-2"></div>
+
+                    <button type="button" id="generateNewBtn" class="w-full mt-4 bg-gray-600 text-white font-semibold py-2 rounded-lg hover:bg-gray-700 transition">Generate Another Token</button>
+                </div>
+
+                <div class="mt-8 pt-8 border-t border-gray-200">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">⚙️ Settings</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Default Session Duration (days)</label>
+                            <input type="number" id="defaultDuration" value="365" min="1" max="3650" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Admin Notification Email</label>
+                            <input type="email" id="adminEmail" value="frantisek.vedma@icloud.com" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+
+                        <button type="button" id="saveSettingsBtn" class="w-full bg-green-600 text-white font-semibold py-2 rounded-lg hover:bg-green-700 transition">Save Settings</button>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-8 border-t border-gray-200">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">📋 Token History</h3>
+                    <div id="tokenHistory" class="space-y-2 max-h-64 overflow-y-auto bg-gray-50 rounded-lg p-4">
+                        <p class="text-sm text-gray-500">No tokens generated yet</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 bg-indigo-50 border border-indigo-200 rounded-lg p-4">
+                <h4 class="font-semibold text-indigo-900 mb-2">ℹ️ How It Works</h4>
+                <ul class="text-sm text-indigo-800 space-y-1">
+                    <li>✓ Generate 8-character access tokens valid for up to 110 minutes</li>
+                    <li>✓ Tokens are sent via email and SMS simultaneously</li>
+                    <li>✓ Each token is unique and single-use</li>
+                    <li>✓ Tokens expire automatically after the set duration</li>
+                    <li>✓ All token history is encrypted and stored locally</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
